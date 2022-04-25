@@ -16,8 +16,8 @@ jobs:
       - name: Test
         run: |-
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t cygnetops/react-test -f ./client/Dockerfile.dev ./client
-          docker run -e CI=true cygnetops/react-test npm test
+          docker build -t salamatburj/react-test -f ./client/Dockerfile.dev ./client
+          docker run -e CI=true salamatburj/react-test npm test
  
       - name: Set Service Key
         uses: 'google-github-actions/auth@v0'
@@ -41,23 +41,23 @@ jobs:
  
       - name: Build
         run: |-
-          docker build -t cygnetops/multi-client-k8s-gh:latest -t cygnetops/multi-client-k8s-gh:${{ env.SHA }} -f ./client/Dockerfile ./client
-          docker build -t cygnetops/multi-server-k8s-pgfix-gh:latest -t cygnetops/multi-server-k8s-pgfix-gh:${{ env.SHA }} -f ./server/Dockerfile ./server
-          docker build -t cygnetops/multi-worker-k8s-gh:latest -t cygnetops/multi-worker-k8s-gh:${{ env.SHA }} -f ./worker/Dockerfile ./worker
+          docker build -t salamatburj/multi-client-k8s-gh:latest -t salamatburj/multi-client-k8s-gh:${{ env.SHA }} -f ./client/Dockerfile ./client
+          docker build -t salamatburj/multi-server-k8s-pgfix-gh:latest -t salamatburj/multi-server-k8s-pgfix-gh:${{ env.SHA }} -f ./server/Dockerfile ./server
+          docker build -t salamatburj/multi-worker-k8s-gh:latest -t salamatburj/multi-worker-k8s-gh:${{ env.SHA }} -f ./worker/Dockerfile ./worker
  
       - name: Push
         run: |-
-          docker push cygnetops/multi-client-k8s-gh:latest
-          docker push cygnetops/multi-server-k8s-pgfix-gh:latest
-          docker push cygnetops/multi-worker-k8s-gh:latest
+          docker push salamatburj/multi-client-k8s-gh:latest
+          docker push salamatburj/multi-server-k8s-pgfix-gh:latest
+          docker push salamatburj/multi-worker-k8s-gh:latest
  
-          docker push cygnetops/multi-client-k8s-gh:${{ env.SHA }}
-          docker push cygnetops/multi-server-k8s-pgfix-gh:${{ env.SHA }}
-          docker push cygnetops/multi-worker-k8s-gh:${{ env.SHA }}
+          docker push salamatburj/multi-client-k8s-gh:${{ env.SHA }}
+          docker push salamatburj/multi-server-k8s-pgfix-gh:${{ env.SHA }}
+          docker push salamatburj/multi-worker-k8s-gh:${{ env.SHA }}
  
       - name: Apply
         run: |-
           kubectl apply -f k8s
-          kubectl set image deployments/server-deployment server=cygnetops/multi-server-k8s-pgfix-gh:${{ env.SHA }}
-          kubectl set image deployments/client-deployment client=cygnetops/multi-client-k8s-gh:${{ env.SHA }}
-          kubectl set image deployments/worker-deployment worker=cygnetops/multi-worker-k8s-gh:${{ env.SHA }}
+          kubectl set image deployments/server-deployment server=salamatburj/multi-server-k8s-pgfix-gh:${{ env.SHA }}
+          kubectl set image deployments/client-deployment client=salamatburj/multi-client-k8s-gh:${{ env.SHA }}
+          kubectl set image deployments/worker-deployment worker=salamatburj/multi-worker-k8s-gh:${{ env.SHA }}
